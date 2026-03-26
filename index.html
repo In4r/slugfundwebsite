@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slug Fund Investment Group — UC Santa Cruz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #001e3c;
+    --paper: #f0f4ff;
+    --gold: #f0b429;
+    --gold-light: #f7d06a;
+    --ucsc-blue: #003c6c;
+    --muted: #7a90b0;
+    --border: rgba(240,180,41,0.3);
+    --card-bg: #002a52;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ink);
+    color: var(--paper);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    padding: 1.2rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid transparent;
+    transition: all 0.4s;
+    background: rgba(0,30,60,0.9);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--paper);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display:flex; gap:2.5rem; list-style:none; }
+  .nav-links a {
+    text-decoration:none; color: var(--muted);
+    font-size: 0.85rem; font-weight:500; letter-spacing:0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold); color: var(--ink);
+    padding: 0.55rem 1.4rem;
+    font-size: 0.8rem; font-weight:600; letter-spacing:0.08em;
+    text-transform: uppercase; text-decoration:none;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 4rem 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; inset:0;
+    background: 
+      radial-gradient(ellipse 60% 50% at 70% 50%, rgba(240,180,41,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(0,60,108,0.4) 0%, transparent 60%),
+      linear-gradient(180deg, #001e3c 0%, #002d5c 100%);
+  }
+  .hero-grid-lines {
+    position:absolute; inset:0; pointer-events:none;
+    background-image: 
+      linear-gradient(rgba(240,180,41,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(240,180,41,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem; letter-spacing:0.2em; text-transform:uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 900; line-height: 0.92;
+    letter-spacing: -0.02em;
+    max-width: 850px;
+    opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero h1 em {
+    font-style: italic; color: var(--gold);
+    display: block;
+  }
+  .hero-sub {
+    margin-top: 2.5rem;
+    max-width: 480px;
+    font-size: 1.05rem; line-height: 1.7;
+    color: rgba(245,242,235,0.65);
+    font-weight: 300;
+    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .hero-actions {
+    margin-top: 3rem; display:flex; gap:1.2rem; align-items:center;
+    opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .btn-primary {
+    background: var(--gold); color: var(--ink);
+    padding: 1rem 2.2rem; font-weight:600;
+    font-size: 0.9rem; letter-spacing:0.06em; text-transform:uppercase;
+    text-decoration:none; transition: all 0.2s;
+    display:inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-ghost {
+    border: 1px solid var(--border); color: var(--paper);
+    padding: 1rem 2.2rem; font-size: 0.9rem;
+    text-decoration:none; transition: all 0.2s;
+    display:inline-block; letter-spacing:0.04em;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-stats {
+    position: absolute; right: 4rem; bottom: 4rem;
+    display: flex; flex-direction:column; gap:2rem;
+    text-align: right;
+    opacity: 0; animation: fadeUp 0.8s 1s forwards;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem; font-weight: 700; color: var(--paper);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.72rem; letter-spacing:0.15em; text-transform:uppercase;
+    color: var(--muted); margin-top: 0.25rem;
+  }
+  .stat-divider { width:1px; height:40px; background:var(--border); margin-left:auto; }
+
+  /* TICKER */
+  .ticker {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 0;
+    overflow: hidden;
+    background: rgba(201,168,76,0.03);
+  }
+  .ticker-track {
+    display:flex; gap:4rem; white-space:nowrap;
+    animation: ticker 30s linear infinite;
+  }
+  .ticker-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem; letter-spacing:0.05em;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .ticker-item .up { color: #4ade80; }
+  .ticker-item .down { color: #f87171; }
+  .ticker-sym { color: var(--gold); margin-right:0.5rem; }
+
+  /* ABOUT */
+  .section { padding: 7rem 4rem; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem; letter-spacing:0.2em; text-transform:uppercase;
+    color: var(--gold); margin-bottom: 1.2rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 700; line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .about-grid {
+    display:grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+    align-items: center; margin-top: 4rem;
+  }
+  .about-text p {
+    font-size: 1.05rem; line-height: 1.8; color: rgba(245,242,235,0.7);
+    font-weight: 300; margin-bottom: 1.2rem;
+  }
+  .about-cards { display:flex; flex-direction:column; gap:1rem; }
+  .about-card {
+    border: 1px solid var(--border);
+    padding: 1.8rem 2rem;
+    background: rgba(201,168,76,0.03);
+    transition: all 0.3s;
+    position:relative; overflow:hidden;
+  }
+  .about-card::before {
+    content:''; position:absolute; left:0; top:0; bottom:0;
+    width:3px; background: var(--gold);
+    transform: scaleY(0); transition: transform 0.3s;
+    transform-origin: bottom;
+  }
+  .about-card:hover { background: rgba(201,168,76,0.06); }
+  .about-card:hover::before { transform: scaleY(1); }
+  .about-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700; margin-bottom:0.5rem;
+  }
+  .about-card p { font-size:0.9rem; color: var(--muted); line-height:1.6; }
+
+  /* PILLARS */
+  .pillars { background: rgba(0,0,0,0.15); }
+  .pillars-grid {
+    display:grid; grid-template-columns: repeat(3,1fr); gap:1.5px;
+    margin-top: 4rem;
+    border: 1.5px solid var(--border);
+  }
+  .pillar {
+    padding: 3rem 2.5rem;
+    border: 1.5px solid var(--border);
+    position: relative; overflow:hidden;
+    transition: background 0.3s;
+  }
+  .pillar:hover { background: rgba(240,180,41,0.06); }
+  .pillar-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem; font-weight: 900; color: rgba(201,168,76,0.12);
+    line-height: 1; margin-bottom: 1rem;
+  }
+  .pillar h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; margin-bottom: 0.8rem; font-weight:700;
+  }
+  .pillar p { font-size:0.9rem; color:var(--muted); line-height:1.7; }
+  .pillar-icon {
+    width:36px; height:36px; margin-bottom:1rem;
+    color: var(--gold);
+  }
+
+  /* TEAM */
+  .team-grid {
+    display:grid; grid-template-columns: repeat(4,1fr); gap:1.5rem;
+    margin-top: 4rem;
+  }
+  .team-card {
+    border: 1px solid var(--border); overflow:hidden;
+    transition: transform 0.3s;
+  }
+  .team-card:hover { transform: translateY(-4px); }
+  .team-avatar {
+    height: 180px;
+    background: linear-gradient(135deg, rgba(240,180,41,0.2) 0%, rgba(0,60,108,0.5) 100%);
+    display:flex; align-items:center; justify-content:center;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; color: var(--gold);
+    border-bottom: 1px solid var(--border);
+  }
+  .team-info { padding: 1.2rem 1.4rem; }
+  .team-info h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight:700;
+  }
+  .team-info .role {
+    font-size: 0.75rem; color: var(--gold);
+    letter-spacing:0.08em; text-transform:uppercase; margin-top:0.2rem;
+  }
+  .team-info .major {
+    font-size:0.8rem; color:var(--muted); margin-top:0.4rem;
+  }
+
+  /* EVENTS */
+  .events-list { margin-top:3rem; }
+  .event-item {
+    display:grid; grid-template-columns: 80px 1fr auto;
+    align-items:center; gap:2rem;
+    padding: 1.8rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .event-item:first-child { border-top: 1px solid var(--border); }
+  .event-item:hover { padding-left: 1rem; }
+  .event-date {
+    text-align:center;
+  }
+  .event-date .day {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight:700; color:var(--gold); line-height:1;
+  }
+  .event-date .month {
+    font-size: 0.7rem; letter-spacing:0.15em; text-transform:uppercase;
+    color:var(--muted);
+  }
+  .event-title { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; }
+  .event-meta { font-size:0.8rem; color:var(--muted); margin-top:0.3rem; }
+  .event-tag {
+    font-family:'DM Mono',monospace; font-size:0.7rem; letter-spacing:0.1em;
+    text-transform:uppercase; padding:0.35rem 0.9rem;
+    border: 1px solid var(--border); color:var(--muted);
+  }
+
+  /* CTA BANNER */
+  .cta-banner {
+    margin: 0 4rem 7rem;
+    padding: 5rem 4rem;
+    background: linear-gradient(135deg, rgba(240,180,41,0.15) 0%, rgba(0,60,108,0.35) 100%);
+    border: 1px solid var(--border);
+    display:grid; grid-template-columns: 1fr auto; align-items:center; gap:3rem;
+    position:relative; overflow:hidden;
+  }
+  .cta-banner::before {
+    content:'';
+    position:absolute; top:-50%; right:-10%;
+    width:400px; height:400px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(240,180,41,0.1) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .cta-banner h2 {
+    font-family:'Playfair Display',serif;
+    font-size: clamp(2rem,4vw,3rem); font-weight:700;
+    line-height:1.1;
+  }
+  .cta-banner p { color:var(--muted); margin-top:0.8rem; font-size:1rem; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 4rem;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .footer-logo {
+    font-family:'Playfair Display',serif; font-size:1rem; font-weight:700;
+  }
+  .footer-logo span { color:var(--gold); }
+  .footer-links { display:flex; gap:2rem; }
+  .footer-links a {
+    font-size:0.8rem; color:var(--muted); text-decoration:none;
+    letter-spacing:0.06em; transition:color 0.2s;
+  }
+  .footer-links a:hover { color:var(--gold); }
+  .footer-copy { font-size:0.75rem; color:var(--muted); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(24px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity:0; transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .reveal.visible {
+    opacity:1; transform: translateY(0);
+  }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links, .nav-cta { display:none; }
+    .hero { padding: 7rem 1.5rem 5rem; }
+    .hero-stats { display:none; }
+    .section { padding: 5rem 1.5rem; }
+    .about-grid { grid-template-columns:1fr; gap:3rem; }
+    .pillars-grid { grid-template-columns:1fr; }
+    .team-grid { grid-template-columns: repeat(2,1fr); }
+    .cta-banner { margin: 0 1.5rem 5rem; grid-template-columns:1fr; padding:3rem 2rem; }
+    footer { flex-direction:column; gap:1.5rem; text-align:center; padding:2rem 1.5rem; }
+    .footer-links { flex-wrap:wrap; justify-content:center; }
+    .event-item { grid-template-columns: 60px 1fr; }
+    .event-tag { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">SFIG <span>·</span> UCSC</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#pillars">What We Do</a></li>
+    <li><a href="#team">Leadership</a></li>
+    <li><a href="#events">Events</a></li>
+  </ul>
+  <a href="#join" class="nav-cta">Apply Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-lines"></div>
+  <p class="hero-tag">UC Santa Cruz &nbsp;·&nbsp; Est. 2016 &nbsp;·&nbsp; Student Investment Group</p>
+  <h1>Where Students<br><em>Invest Wisely,</em><br>Think Critically.</h1>
+  <p class="hero-sub">Slug Fund Investment Group trains the next generation of investors through rigorous securities research, real-world portfolio analysis, and a community of driven peers.</p>
+  <div class="hero-actions">
+    <a href="#join" class="btn-primary">Join the Group</a>
+    <a href="#about" class="btn-ghost">Learn More</a>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="stat-num">9+</div>
+      <div class="stat-label">Years Active</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div>
+      <div class="stat-num">100+</div>
+      <div class="stat-label">Active Members</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div>
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Opportunities</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track" id="ticker">
+    <span class="ticker-item"><span class="ticker-sym">AAPL</span>182.30 <span class="up">▲ +1.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">MSFT</span>374.50 <span class="up">▲ +0.8%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">NVDA</span>612.18 <span class="up">▲ +2.4%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">TSLA</span>248.90 <span class="down">▼ -0.5%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">AMZN</span>178.62 <span class="up">▲ +1.1%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">GOOGL</span>156.43 <span class="down">▼ -0.3%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">META</span>495.22 <span class="up">▲ +1.7%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">JPM</span>203.41 <span class="up">▲ +0.6%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">SPY</span>506.15 <span class="up">▲ +0.9%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">BRK.B</span>374.80 <span class="up">▲ +0.4%</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item"><span class="ticker-sym">AAPL</span>182.30 <span class="up">▲ +1.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">MSFT</span>374.50 <span class="up">▲ +0.8%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">NVDA</span>612.18 <span class="up">▲ +2.4%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">TSLA</span>248.90 <span class="down">▼ -0.5%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">AMZN</span>178.62 <span class="up">▲ +1.1%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">GOOGL</span>156.43 <span class="down">▼ -0.3%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">META</span>495.22 <span class="up">▲ +1.7%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">JPM</span>203.41 <span class="up">▲ +0.6%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">SPY</span>506.15 <span class="up">▲ +0.9%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">BRK.B</span>374.80 <span class="up">▲ +0.4%</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <p class="section-label reveal">Our Mission</p>
+  <h2 class="section-title reveal">Empowering the Next<br>Generation of Investors</h2>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Founded in 2016 at UC Santa Cruz, the Slug Fund Investment Group exists to bridge the gap between classroom theory and real market practice. We believe every student, regardless of major, deserves access to financial literacy and investment knowledge.</p>
+      <p>Our members conduct in-depth securities research, debate macroeconomic trends, and build the analytical skills that define successful careers in finance, consulting, and beyond.</p>
+      <p>We are more than a club — we are a community of curious minds committed to understanding the markets that shape our world.</p>
+    </div>
+    <div class="about-cards reveal">
+      <div class="about-card">
+        <h3>Open to All Majors</h3>
+        <p>You don't need to be an economics or business major. Our diverse membership includes engineers, scientists, and artists who share a passion for finance.</p>
+      </div>
+      <div class="about-card">
+        <h3>Real-World Research</h3>
+        <p>Members produce equity research reports, sector analyses, and investment pitches — the same deliverables expected by top financial firms.</p>
+      </div>
+      <div class="about-card">
+        <h3>Career-Ready Network</h3>
+        <p>Alumni across Goldman Sachs, BlackRock, Citadel, and tech companies mentor current members and connect them with internship and job opportunities.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="section pillars" id="pillars">
+  <p class="section-label reveal">What We Do</p>
+  <h2 class="section-title reveal">Six Pillars of<br>Financial Education</h2>
+  <div class="pillars-grid">
+    <div class="pillar reveal">
+      <div class="pillar-num">01</div>
+      <h3>Equity Research</h3>
+      <p>Deep-dive into individual stocks across sectors. Learn valuation methods including DCF, comparable company analysis, and precedent transactions.</p>
+    </div>
+    <div class="pillar reveal">
+      <div class="pillar-num">02</div>
+      <h3>Macro Analysis</h3>
+      <p>Understand how interest rates, inflation, geopolitics, and central bank policy shape global markets and investment opportunities.</p>
+    </div>
+    <div class="pillar reveal">
+      <div class="pillar-num">03</div>
+      <h3>Portfolio Theory</h3>
+      <p>Explore modern portfolio theory, factor investing, risk-adjusted returns, and asset allocation across equities, fixed income, and alternatives.</p>
+    </div>
+    <div class="pillar reveal">
+      <div class="pillar-num">04</div>
+      <h3>Quantitative Finance</h3>
+      <p>Apply Python and statistical models to analyze market data, back-test strategies, and build algorithmic trading frameworks.</p>
+    </div>
+    <div class="pillar reveal">
+      <div class="pillar-num">05</div>
+      <h3>Career Development</h3>
+      <p>Resume workshops, mock interviews, networking events with alumni and industry professionals, and guidance on recruiting for top finance roles.</p>
+    </div>
+    <div class="pillar reveal">
+      <div class="pillar-num">06</div>
+      <h3>Financial Literacy</h3>
+      <p>Workshops for all students covering personal finance fundamentals: budgeting, credit, taxes, and building long-term wealth.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section" id="team">
+  <p class="section-label reveal">Leadership</p>
+  <h2 class="section-title reveal">The People Behind<br>the Portfolio</h2>
+  <div class="team-grid">
+    <div class="team-card reveal">
+      <div class="team-avatar"> <img src ="images/joshua-morris.jpg" alt="Joshua Morris"> </div>
+      <div class="team-info">
+        <h4>Joshua Morris</h4>
+        <div class="role">President</div>
+        <div class="major">Economics & Mathematics</div>
+      </div>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-avatar">M</div>
+      <div class="team-info">
+        <h4>Vincent Call</h4>
+        <div class="role">Vice President</div>
+        <div class="major">Economics</div>
+      </div>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-avatar">J</div>
+      <div class="team-info">
+        <h4>Julian Marquit</h4>
+        <div class="role">Chief Operating Officer</div>
+        <div class="major"></div>
+      </div>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-avatar">N</div>
+      <div class="team-info">
+        <h4>Nicholas Hetter</h4>
+        <div class="role">Director of External Affairs</div>
+        <div class="major"></div>
+      </div>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-avatar">S</div>
+      <div class="team-info">
+        <h4>Sushane Atkamuri</h4>
+        <div class="role">officer</div>
+        <div class="major"></div>
+      </div>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-avatar">K</div>
+      <div class="team-info">
+        <h4>Kevin Yu</h4>
+        <div class="role">Chief Technical Officer</div>
+        <div class="major"></div>
+      </div>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-avatar">Sp</div>
+      <div class="team-info">
+        <h4>Spencer Ng</h4>
+        <div class="role">Director of Crypto</div>
+        <div class="major"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section class="section" id="events">
+  <p class="section-label reveal">Upcoming</p>
+  <h2 class="section-title reveal">Events & Meetings</h2>
+  <div class="events-list">
+    <div class="event-item reveal">
+      <div class="event-date">
+        <div class="day">26</div>
+        <div class="month">Feb</div>
+      </div>
+      <div>
+        <div class="event-title">Winter General Meeting</div>
+        <div class="event-meta">6:00 PM – 7:00 PM &nbsp;·&nbsp; Stevenson Academic 175</div>
+      </div>
+      <div class="event-tag">Weekly</div>
+    </div>
+    <div class="event-item reveal">
+      <div class="event-date">
+        <div class="day">05</div>
+        <div class="month">Mar</div>
+      </div>
+      <div>
+        <div class="event-title">Equity Pitch Workshop</div>
+        <div class="event-meta">6:00 PM – 7:30 PM &nbsp;·&nbsp; Stevenson Academic 175</div>
+      </div>
+      <div class="event-tag">Workshop</div>
+    </div>
+    <div class="event-item reveal">
+      <div class="event-date">
+        <div class="day">12</div>
+        <div class="month">Mar</div>
+      </div>
+      <div>
+        <div class="event-title">Spring Recruitment Info Session</div>
+        <div class="event-meta">5:00 PM – 6:30 PM &nbsp;·&nbsp; Kresge Town Hall</div>
+      </div>
+      <div class="event-tag">Recruitment</div>
+    </div>
+    <div class="event-item reveal">
+      <div class="event-date">
+        <div class="day">19</div>
+        <div class="month">Mar</div>
+      </div>
+      <div>
+        <div class="event-title">Mock Stock Pitch Competition</div>
+        <div class="event-meta">4:00 PM – 7:00 PM &nbsp;·&nbsp; Baskin Engineering 169</div>
+      </div>
+      <div class="event-tag">Competition</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-banner reveal" id="join">
+  <div>
+    <h2>Ready to Start<br>Investing in Yourself?</h2>
+    <p>Applications are open every quarter. No prior finance experience required — just curiosity and commitment.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:1rem;flex-shrink:0;">
+    <a href="mailto:slugfundig@gmail.com" class="btn-primary">Apply to Join</a>
+    <a href="https://www.instagram.com/ucsc.sfig/" target="_blank" class="btn-ghost" style="text-align:center;">Follow on Instagram</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Slug Fund <span>Investment Group</span></div>
+  <div class="footer-links">
+    <a href="mailto:slugfundig@gmail.com">Contact</a>
+    <a href="https://www.instagram.com/ucsc.sfig/" target="_blank">Instagram</a>
+    <a href="https://getinvolved.ucsc.edu" target="_blank">UCSC Get Involved</a>
+    <a href="https://sfig.sites.ucsc.edu/" target="_blank">Old Site</a>
+  </div>
+  <div class="footer-copy">© 2026 SFIG · UC Santa Cruz</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Stagger siblings
+  document.querySelectorAll('.pillars-grid, .team-grid, .events-list').forEach(container => {
+    container.querySelectorAll('.reveal').forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.08) + 's';
+    });
+  });
+</script>
+</body>
+</html>
