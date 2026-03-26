@@ -1,6 +1,6 @@
 .member-image {
   width: 50%;
-  height: 180px;        /* set a fixed height for the image area */
+  height: 90px;        /* set a fixed height for the image area */
   overflow: hidden;     /* hides anything outside the frame */
 }
 
