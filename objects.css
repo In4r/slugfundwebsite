@@ -10,3 +10,16 @@
   object-fit: cover;
   object-position: center top;  /* shows face, not chest */
 }
+
+.member-sushane-image {
+  width: 100%;         /* make the image area take up the full width of the card */
+  height: 190px;        /* set a fixed height for the image area */
+  overflow: hidden;     /* hides anything outside the frame */
+}
+
+.member-sushane-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;  /* shows face, not chest */
+}
