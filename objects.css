@@ -11,3 +11,15 @@
   object-position: center top;  /* shows face, not chest */
 }
 
+.member-center-image {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.member-center-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;  /* shows face, not chest */
+}
