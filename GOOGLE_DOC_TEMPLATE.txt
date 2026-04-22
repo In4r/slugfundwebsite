@@ -1,0 +1,35 @@
+Copy this format into your Google Doc exactly.
+Each event must start with EVENT on its own line.
+─────────────────────────────────────────
+
+EVENT
+Date: April 26, 2026
+Title: Spring General Meeting
+Time: 6:00 PM – 7:00 PM
+Location: Stevenson Academic 175
+Tag: Weekly
+
+EVENT
+Date: May 5, 2026
+Title: Equity Pitch Workshop
+Time: 6:00 PM – 7:30 PM
+Location: Stevenson Academic 175
+Tag: Workshop
+
+EVENT
+Date: May 12, 2026
+Title: Spring Recruitment Info Session
+Time: 5:00 PM – 6:30 PM
+Location: Kresge Town Hall
+Tag: Recruitment
+
+EVENT
+Date: May 19, 2026
+Title: Mock Stock Pitch Competition
+Time: 4:00 PM – 7:00 PM
+Location: Baskin Engineering 169
+Tag: Competition
+
+─────────────────────────────────────────
+Available Tag values (or use your own):
+Weekly | Workshop | Recruitment | Competition | Speaker | Social

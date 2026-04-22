@@ -1,0 +1,12 @@
+{
+  "name": "sfig-website",
+  "version": "1.0.0",
+  "description": "SFIG website with auto-updating events from Google Docs",
+  "scripts": {
+    "update-events": "node update-events.js",
+    "build": "node update-events.js"
+  },
+  "dependencies": {
+    "googleapis": "^140.0.0"
+  }
+}
