@@ -15,9 +15,10 @@ const HTML_FILE = path.join(__dirname, 'index.html');
 // ─────────────────────────────────────────────
 
 async function fetchEvents() {
+  // NEW — reads from environment variable
   const auth = new google.auth.GoogleAuth({
-    keyFile: path.join(__dirname, 'credentials.json'),
-    scopes: ['https://www.googleapis.com/auth/documents.readonly'],
+  credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS),
+  scopes: ['https://www.googleapis.com/auth/documents.readonly'],
   });
 
   const docs = google.docs({ version: 'v1', auth });
