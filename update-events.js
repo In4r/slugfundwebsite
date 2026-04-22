@@ -17,9 +17,12 @@ const HTML_FILE = path.join(__dirname, 'index.html');
 async function fetchEvents() {
   // NEW — reads from environment variable
   const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS),
+  ...(process.env.GOOGLE_CREDENTIALS
+    ? { credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS) }
+    : { keyFile: path.join(__dirname, 'credentials.json') }
+  ),
   scopes: ['https://www.googleapis.com/auth/documents.readonly'],
-  });
+});
 
   const docs = google.docs({ version: 'v1', auth });
 
@@ -124,16 +127,26 @@ function updateHTML(eventsHTML) {
 
   let html = fs.readFileSync(HTML_FILE, 'utf8');
 
-  // Replace the contents inside <div class="events-list">...</div>
-  const before = html;
-  html = html.replace(
-    /(<div class="events-list">)([\s\S]*?)(<\/div>\s*\n<\/section>)/,
-    `$1\n${eventsHTML}\n  $3`
-  );
+  const startTag = '<div class="events-list">';
+  const endTag = '</div>';
 
-  if (html === before) {
-    throw new Error('❌ Could not find the events-list section in index.html. Make sure it contains <div class="events-list">');
+  const startIndex = html.indexOf(startTag);
+  if (startIndex === -1) {
+    throw new Error('❌ Could not find <div class="events-list"> in index.html');
   }
+
+  // Find the closing </div> after the opening tag
+  const contentStart = startIndex + startTag.length;
+  const endIndex = html.indexOf(endTag, contentStart);
+  if (endIndex === -1) {
+    throw new Error('❌ Could not find closing </div> for events-list');
+  }
+
+  // Stitch it back together
+  const before = html.substring(0, contentStart);
+  const after = html.substring(endIndex);
+
+  html = before + '\n' + eventsHTML + '\n  ' + after;
 
   fs.writeFileSync(HTML_FILE, html, 'utf8');
   console.log('✅ index.html updated successfully!');
