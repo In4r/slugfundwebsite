@@ -122,7 +122,7 @@ function generateEventsHTML(events) {
 
 function updateHTML(eventsHTML) {
   if (!fs.existsSync(HTML_FILE)) {
-    throw new Error(`❌ Could not find ${HTML_FILE}. Make sure update-events.js is in the same folder as index.html.`);
+    throw new Error(`❌ Could not find ${HTML_FILE}.`);
   }
 
   let html = fs.readFileSync(HTML_FILE, 'utf8');
@@ -135,18 +135,36 @@ function updateHTML(eventsHTML) {
     throw new Error('❌ Could not find <div class="events-list"> in index.html');
   }
 
-  // Find the closing </div> after the opening tag
   const contentStart = startIndex + startTag.length;
-  const endIndex = html.indexOf(endTag, contentStart);
-  if (endIndex === -1) {
-    throw new Error('❌ Could not find closing </div> for events-list');
+
+  // Walk through and find the MATCHING closing </div>
+  // by counting opening and closing div tags
+  let depth = 1;
+  let i = contentStart;
+
+  while (i < html.length && depth > 0) {
+    const nextOpen  = html.indexOf('<div', i);
+    const nextClose = html.indexOf('</div>', i);
+
+    if (nextClose === -1) {
+      throw new Error('❌ Could not find matching closing </div> for events-list');
+    }
+
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth++;
+      i = nextOpen + 4;
+    } else {
+      depth--;
+      if (depth === 0) {
+        // This is the correct closing </div>
+        const before = html.substring(0, contentStart);
+        const after  = html.substring(nextClose);
+        html = before + '\n' + eventsHTML + '\n  ' + after;
+        break;
+      }
+      i = nextClose + 6;
+    }
   }
-
-  // Stitch it back together
-  const before = html.substring(0, contentStart);
-  const after = html.substring(endIndex);
-
-  html = before + '\n' + eventsHTML + '\n  ' + after;
 
   fs.writeFileSync(HTML_FILE, html, 'utf8');
   console.log('✅ index.html updated successfully!');
